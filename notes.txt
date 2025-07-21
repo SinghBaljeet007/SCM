@@ -1,0 +1,218 @@
+
+npx tailwindcss -i src/main/resources/static/css/input.css -o src/main/resources/static/css/output.css --watch
+
+
+References: 
+
+https://www.thymeleaf.org/doc/articles/layouts.html
+https://flowbite.com/docs/components/card/
+https://tailwindcss.com/docs/installation
+
+
+package com.scm.controllers;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
+@Controller
+public class PageController {
+
+    @RequestMapping("/home")
+    public String homePage(Model model) {
+        System.out.println("Home page handler");
+
+        // sending below data to view on page with the help of thymleaf in html template
+        model.addAttribute("name", "Smart Contact Manager Test");
+        model.addAttribute("admin", "Baljeet Singh");
+        model.addAttribute("githubRepo", "https://github.com/SinghBaljeet007");
+        return "home";
+    }
+
+    // about
+
+    @RequestMapping("/about")
+    public String aboutPage() {
+        System.out.println("About page loading");
+        return "about";
+    }
+    
+
+    //services
+    @RequestMapping("/services")
+    public String servicesPage() {
+        System.out.println("Services page loading");
+        return "services";
+    }
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" data-th-href="@{'/css/output.css'}">
+    <!-- <style>
+        .container {
+            margin: auto;
+            width: 50%;
+            padding: 40px;
+            background: #e2e2e2;
+        }
+    </style> -->
+</head>
+
+<body>
+    <div class="bg-gray-200 w-1/2 p-4 flex flex-col space-y-2 mx-auto mt-4">
+        <h1 class="text-2xl font-bold" data-th-text="${name}"> Welcome to home page</h1>
+        <p class="text-xl text-gray-700">Admin: <span th:text="${admin}"></span></p>
+        <p><b>Checkout the source code on:</b><span th:text="${githubRepo}"></span></p>
+
+        <a th:href="${githubRepo}" class="text-blue-700 hover:underline">source code link</a>
+
+        <p class="text-gray-600"> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Incidunt ipsum tempora
+            dolores sed nemo quisquam omnis assumenda quasi maiores id perferendis illo, quaerat dolorem fugiat.
+            Deleniti eaque sequi placeat, incidunt unde dignissimos. Eos natus mollitia impedit modi expedita. Deserunt
+            architecto quae eius odio vel veritatis ratione itaque voluptatum reiciendis odit.</p>
+
+        <div class="mx-auto">
+            <button class="px-3 py-3 rounded bg-green-700 text-white hover:bg-green-600">Click here</button>
+        </div>
+    </div>
+
+    <!-- flowbite content below -->
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+/*
+ * NOTES
+ * 
+ * We are using tailwindcss for styling and flowbite to get the generated components like alerts, banner etc.
+ * using thymeleaf fragments -> ex in the home.html template we can insert a header fragment from our common html file which we can use in other pages as well.
+ * 
+ * How to include tailwindcss and flowbite in your html file -> 
+ * 
+ *1. Command to run tailwind for each session -> npx tailwindcss
+ -i src/main/resources/static/css/input.css -o src/ma
+in/resources/static/css/output.css --watch
+
+2. then include output in your html
+
+3. if you want flowbite: include css and javascript using cdn
+
+tailwind annotations sample 
+"bg-gray-200 w-1/2 p-4 mx-auto mt-4"
+bg-gray-200 -> background gray color 200
+w-1/2 -> width half of page
+mx-auto -> to make the element to center
+mt-4 -> margin 4
+ */
+
+
+Fragments in thymeleaf: 
+
+How to create fragments
+
+<!-- <div class="parent-fragment" th:fragment="parent(x,y)"> -->
+<div class="parent-fragment" th:fragment="parent(content)">
+    <h1>This is parent fragment</h1>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor, veniam!</p>
+    <!-- <h1>Value of x is <span th:text="${x}"></span></h1>
+    <h1>Value of y is <span th:text="${y}"></span></h1> -->
+    <div th:replace="${content}"></div>
+</div>
+
+
+How to insert and replace fragments
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>This is services page</h1>
+    <hr>
+    <!-- using fragment -->
+    <div th:replace="~{base :: parent(~{::.third_content})}">
+        <section id="main_content">
+            <h1>This is dynamic services passed to base parent</h1>
+        </section>
+        <section id="second_content">
+            <h1>This is second content</h1>
+        </section>
+        <section class="third_content">
+            <h1>This is third content</h1>
+        </section>
+    </div>
+
+</body>
+</html>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>This is about page</h1>
+    <hr>
+    <!-- using fragment -->
+    <!-- <div class="host-tag" th:insert="~{base :: parent('about one', 'about two')}"></div> -->
+    <div class="host-tag" th:insert="~{base :: parent(~{::section})}">
+        <section>
+            <h1>This is dynamic content</h1>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum dignissimos vel earum temporibus exercitationem vitae, voluptatum doloribus quam hic unde.</p>
+        </section>
+    </div>
+
+</body>
+</html>
+
+
+Layouts
+
+
+
+Social Login Using oAuth2
+
+Login with Google
+
+1. oAuth2 -> Add oAuth2 client starter dependency
+
+2. Google -> 
+	a. client_id
+	b. client_secret
+
+3. Add the oAuth login configuration
+
+4. Login page /login and successhandler
+
+5. In your success handler you are getting the data... save kr skte hain data based on provider information 
+
+
+
+client_id: 968825791732-5513roec0p8s6qale93vi8fio82iarqo.apps.googleusercontent.com
+
+client_secret: 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
