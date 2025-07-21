@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::script})}">
+
+<head>
+    <title>Edit Contact</title>
+</head>
+
+<body>
+    <div id="content">
+        <!-- Sidebar -->
+        <div th:if="${loggedInUser}">
+            <div th:replace="~{user/sidebar :: sidebar}"></div>
+        </div>
+
+        <div class="sm:pl-64">
+            <div class="grid grid-cols-12">
+                <div class="col-span-3"></div>
+                <div class="col-span-12 md:col-span-6">
+                    <div
+                        class="card block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
+
+                        <div data-th-replace="~{message::message-box}"></div>
+
+                        <h1 class="text-2xl font-semibold">Edit Contact</h1>
+                        <!-- <p class="text-gray-500">
+                            This contact will be stored on cloud, you can email this client from scm...
+                        </p> -->
+
+                        <form 
+                            class="mt-8"
+                            data-th-action="@{'/user/contacts/update/' + ${contactId}}"
+                            data-th-object="${contactForm}"
+                            method="post"
+                            novalidate
+                            enctype="multipart/form-data"
+                        >
+
+                            <!-- Name field -->
+                            <div class="mb-3">
+                                <label for="input-group-1"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Name
+                                </label>
+                                <div class="relative mb-1">
+                                    <div
+                                        class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                        <i class="fa-regular fa-user w-4 h-4"></i>
+                                    </div>
+                                    <input type="text"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-300 focus:border-gray-200 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-300 dark:focus:border-gray-300"
+                                        placeholder="Tony Stark"
+                                        data-th-field="*{name}">
+                                </div>
+                                <p 
+                                class="text-red-500 text-xs"
+                                data-th-if="${#fields.hasErrors('name')}"
+                                data-th-errors="*{name}"
+                                ></p>
+                            </div>
+
+                            <!-- Email field -->
+                            <div class="mb-3">
+                                <label for="input-group-2"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Email
+                                </label>
+                                <div class="relative mb-1">
+                                    <div
+                                        class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                        <i class="fa-regular fa-envelope h-4 w-4"></i>
+                                    </div>
+                                    <input type="text"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-300 focus:border-gray-200 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-300 dark:focus:border-gray-300"
+                                        placeholder="tony@starkindustries.com"
+                                        data-th-field="*{email}">
+                                </div>
+                                <p 
+                                class="text-red-500 text-xs"
+                                data-th-if="${#fields.hasErrors('email')}"
+                                data-th-errors="*{email}"
+                                ></p>
+                            </div>
+
+                            <!-- mobile field -->
+                            <div class="mb-3">
+                                <label for="input-group-3"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Mobile
+                                </label>
+                                <div class="relative mb-1">
+                                    <div
+                                        class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                        <i class="fa-solid fa-mobile-screen-button h-4 w-4"></i>
+                                    </div>
+                                    <input type="text"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-300 focus:border-gray-200 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-300 dark:focus:border-gray-300"
+                                        placeholder="XXXXXXXXXX"
+                                        data-th-field="*{mobile}">
+                                </div>
+                                <p 
+                                class="text-red-500 text-xs"
+                                data-th-if="${#fields.hasErrors('mobile')}"
+                                data-th-errors="*{mobile}"
+                                ></p>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="mb-3">
+                                <label for="message"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Address
+                                </label>
+                                <textarea rows="4"
+                                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-gray-300 focus:border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-300 dark:focus:border-gray-300"
+                                    placeholder="Type contact address..."
+                                    data-th-field="*{address}"></textarea>
+                                
+                                <p 
+                                class="text-red-500 text-xs mt-1"
+                                data-th-if="${#fields.hasErrors('address')}"
+                                data-th-errors="*{address}"
+                                ></p>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="mb-3">
+                                <label for="message"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact
+                                    Description
+                                </label>
+                                <textarea rows="4"
+                                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-gray-300 focus:border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-300 dark:focus:border-gray-300"
+                                    placeholder="Write something about contact..."
+                                    data-th-field="*{description}"></textarea>
+                            </div>
+
+                            <!-- Social links -->
+                            <div class="flex space-x-3 mb-3">
+                                <div class="w-full">
+                                    <!-- website link -->
+                                    <div class="mb-3">
+                                        <label for="input-group-3"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Website
+                                        </label>
+                                        <div class="relative mb-3">
+                                            <div
+                                                class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                                <i class="fa-solid fa-globe h-4 w-4"></i>
+                                            </div>
+                                            <input type="text"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-300 focus:border-gray-200 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-300 dark:focus:border-gray-300"
+                                                placeholder="http://scm.com"
+                                                data-th-field="*{websiteLink}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="w-full">
+                                    <!-- linkedin link -->
+                                    <div class="mb-3">
+                                        <label for="input-group-3"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">LinkedIn
+                                        </label>
+                                        <div class="relative mb-3">
+                                            <div
+                                                class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                                <i class="fa-brands fa-linkedin h-4 w-4"></i>
+                                            </div>
+                                            <input type="text"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-300 focus:border-gray-200 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-300 dark:focus:border-gray-300"
+                                                placeholder="http://linkedin.com"
+                                                data-th-field="*{linkedInLink}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- upload contact image -->
+                            <div class="mb-3">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    for="default_size">Upload contact image</label>
+                                <input
+                                    id="image_file_input"
+                                    class="block w-full mb-1 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                    type="file"
+                                    data-th-field="*{contactImage}">
+
+                                    <p 
+                                    class="text-red-500 text-xs"
+                                    data-th-if="${#fields.hasErrors('contactImage')}"
+                                    data-th-errors="*{contactImage}"
+                                    ></p>
+
+                                <img class="max-h-52 mx-auto rounded shadow m-3" data-th-src="*{picture}" id="upload_image_preview" alt="">
+                            </div>
+
+                            <!-- favorite checkbox -->
+                            <div class="flex items-center mb-3">
+                                <input type="checkbox"
+                                    class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                    data-th-field="*{favorite}">
+                                <label for="default-checkbox"
+                                    class="ms-2 text-sm font-medium text-gray-700 dark:text-gray-300">Add to your
+                                    favorite contacts</label>
+                            </div>
+
+                            <div class="button_container mb-3 flex justify-center space-x-3">
+                                <button type="submit"
+                                    class="text-white bg-gray-900 hover:bg-gray-700 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-500 shadow border border-gray-700 dark:border dark:border-gray-600">Save</button>
+
+                                <a th:href="@{'/user/contacts'}"
+                                    class="text-slate-100 dark:text-slate-100 bg-gray-500 hover:bg-gray-600 focus:ring-1 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-gray-600 dark:hover:bg-gray-500 dark:focus:ring-gray-800 shadow border border-gray-500 dark:border dark:border-gray-200">Cancel</a>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script data-th-src="@{/js/contact_image_loader.js}"></script>
+    <script>
+        console.log("This is Profile page");
+    </script>
+</body>
+
+</html>
